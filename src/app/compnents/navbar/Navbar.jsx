@@ -1,15 +1,34 @@
 "use client";
 
+import { useConnectWallet } from "@/context/connectWalletProvider";
 import { Button } from "antd/es/radio";
 import Link from "next/link";
+import { useState } from "react";
 import { useConnect } from "wagmi";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 
 
 function Navbar() {
+  const { connectAsync } = useConnect();
+  const [connectAddress, setConnectAddress] = useState(null);
+  const { connectWallet } = useConnectWallet();
 
- const {connect , connectors} = useConnect()
+  
 
- console.log(connectors);
+
+  const walletConnectHandler = async () => {
+    try {
+      const { account, chain } = await connectAsync({
+        connector: new MetaMaskConnector(),
+      });
+
+      setConnectAddress(account);
+      connectWallet(account);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
 
   return (
@@ -34,7 +53,13 @@ function Navbar() {
 
       {/* button  */}
       <div>
-        <Button type="primary">Connect</Button>
+        {connectAddress ? (
+          connectAddress
+        ) : (
+          <Button type="primary" onClick={walletConnectHandler}>
+            Connect
+          </Button>
+        )}
       </div>
     </div>
   );

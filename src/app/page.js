@@ -1,6 +1,8 @@
 "use client";
 
+import { useConnectWallet } from "@/context/connectWalletProvider";
 import { SettingOutlined, SwapOutlined } from "@ant-design/icons";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import tokenList from "../tokenList.";
 import Dropdown from "./compnents/dropdown/Dropdown";
@@ -12,6 +14,8 @@ export default function Home() {
   const [takerInput, setTakerInput] = useState("0.0");
   const [makerInput, setMakerInput] = useState("0.0");
   const [convertedToken, setConvertedToken] = useState(0);
+  const { address } = useConnectWallet();
+  const [txDetails, setTxDetails] = useState(null);
 
   // token price
 
@@ -60,6 +64,46 @@ export default function Home() {
     setMakerInput(e.target.value);
     if (!e.target.value) {
       setTakerInput("0.0");
+    }
+  };
+
+  // swap submit handler
+
+  const onSwapHandler = async () => {
+    try {
+      if (
+        takerInput === "0.0" ||
+        makerInput === "0.0" ||
+        !selectedToken1 ||
+        !selectedToken2 ||
+        !address
+      )
+        return;
+
+      const res = await axios.get(
+        `api/allowance?tokenAddress=${selectedToken1?.address}&walletAddress=${address}`
+      );
+
+      if (res?.data?.data?.allowance == 0) {
+        const res2 = await axios.get(
+          `api/approve?tokenAddress=${selectedToken1?.address}`
+        );
+        setTxDetails(res2);
+        console.log(res2);
+      }
+
+  
+      const sawRes = await axios.get(
+        `api/swap?src=${selectedToken1.address}&dst=${
+          selectedToken2.address
+        }&swapAmount=${String(
+          Number(makerInput) * 10 ** selectedToken1.decimals
+        )}&fromWallet=${address}`
+      );
+
+      console.log(`swap` , sawRes);
+    } catch (err) {
+      // console.log(err);
     }
   };
 
@@ -129,6 +173,7 @@ export default function Home() {
         <button
           type="button"
           className="w-full bg-slate-400 text-white py-3 text-center rounded-md mt-4"
+          onClick={onSwapHandler}
         >
           Swap
         </button>

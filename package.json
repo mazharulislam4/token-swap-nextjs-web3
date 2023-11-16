@@ -17,6 +17,7 @@
     "@moralisweb3/next": "^2.23.1",
     "@wagmi/core": "^1.4.2",
     "antd": "^5.9.4",
+    "axios": "^1.5.1",
     "framer-motion": "^10.16.4",
     "moralis": "^2.23.1",
     "next": "latest",
@@ -24,6 +25,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-icons": "^4.11.0",
+    "tap": "^18.4.2",
     "viem": "^1.14.0",
     "wagmi": "^1.4.2"
   },
@@ -31,6 +33,7 @@
     "autoprefixer": "latest",
     "eslint": "latest",
     "eslint-config-next": "latest",
+    "pino-pretty": "^10.2.2",
     "postcss": "latest",
     "tailwindcss": "latest"
   }
