@@ -15,11 +15,11 @@ export default async function approve(req, res) {
     const response = await axiosInchConfig.get(
       `/swap/v5.2/1/approve/transaction?tokenAddress=${tokenAddress}`
     );
-console.log(response);
+
     console.log(response.data);
 
     return res.status(200).json({ isError: false, data: response.data });
   } catch (err) {
-    console.log(err);
+    res.status(500).json({ isError: true, error: err });
   }
 }

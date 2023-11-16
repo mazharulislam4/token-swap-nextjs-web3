@@ -89,19 +89,19 @@ export default function Home() {
           `api/approve?tokenAddress=${selectedToken1?.address}`
         );
         setTxDetails(res2);
+
+        const swapRes = await fetch(
+          `api/_swap?src=${selectedToken1.address}&dst=${
+            selectedToken2.address
+          }&swapAmount=${String(
+            Number(makerInput) * 10 ** selectedToken1.decimals
+          )}&fromWallet=${address}`
+        );
+
+        console.log(`swap`, swapRes);
+
         console.log(res2);
       }
-
-  
-      const sawRes = await axios.get(
-        `api/swap?src=${selectedToken1.address}&dst=${
-          selectedToken2.address
-        }&swapAmount=${String(
-          Number(makerInput) * 10 ** selectedToken1.decimals
-        )}&fromWallet=${address}`
-      );
-
-      console.log(`swap` , sawRes);
     } catch (err) {
       // console.log(err);
     }
